@@ -1,21 +1,24 @@
-import React from "react";
+import React, { Suspense, use } from "react";
+
 import Link from "next/link";
 
-import prisma from "./db";
 import { TodoItem } from "@/components";
+import prisma from "./db";
+
+export const dynamic = "force-dynamic";
 
 async function getTodos() {
-  return prisma.todo.findMany();
+  "use server";
+  return await prisma.todo.findMany();
 }
 
 async function toggleTodo(id: string, complete: boolean) {
   "use server";
-
   await prisma.todo.update({ where: { id }, data: { complete } });
 }
 
-async function Home() {
-  const todos = await getTodos();
+function App() {
+  const todos = use(getTodos());
 
   return (
     <>
@@ -37,4 +40,10 @@ async function Home() {
   );
 }
 
-export default Home;
+export default function Page() {
+  return (
+    <Suspense fallback={<h2>Loading...</h2>}>
+      <App />
+    </Suspense>
+  );
+}

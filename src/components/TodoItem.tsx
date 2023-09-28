@@ -2,12 +2,15 @@
 
 import React from "react";
 
-type TodoItemProps = {
+export interface TodoType {
   id: string;
   title: string;
   complete: boolean;
   createdAt: Date;
   updatedAt: Date;
+}
+
+type TodoItemProps = TodoType & {
   toggleTodo: (id: string, complete: boolean) => void;
 };
 
