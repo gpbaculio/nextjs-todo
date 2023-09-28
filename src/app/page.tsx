@@ -5,9 +5,7 @@ import prisma from "./db";
 import { TodoItem } from "@/components";
 
 async function getTodos() {
-  "use server";
-
-  return await prisma.todo.findMany();
+  return prisma.todo.findMany();
 }
 
 async function toggleTodo(id: string, complete: boolean) {
